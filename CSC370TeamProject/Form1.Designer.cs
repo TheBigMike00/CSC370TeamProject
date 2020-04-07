@@ -147,36 +147,36 @@
             this.totalvalue1Label.AutoSize = true;
             this.totalvalue1Label.Location = new System.Drawing.Point(563, 97);
             this.totalvalue1Label.Name = "totalvalue1Label";
-            this.totalvalue1Label.Size = new System.Drawing.Size(49, 20);
+            this.totalvalue1Label.Size = new System.Drawing.Size(27, 20);
             this.totalvalue1Label.TabIndex = 16;
-            this.totalvalue1Label.Text = "$0.00";
+            this.totalvalue1Label.Text = "$0";
             // 
             // totalvalue2Label
             // 
             this.totalvalue2Label.AutoSize = true;
             this.totalvalue2Label.Location = new System.Drawing.Point(563, 150);
             this.totalvalue2Label.Name = "totalvalue2Label";
-            this.totalvalue2Label.Size = new System.Drawing.Size(49, 20);
+            this.totalvalue2Label.Size = new System.Drawing.Size(27, 20);
             this.totalvalue2Label.TabIndex = 17;
-            this.totalvalue2Label.Text = "$0.00";
+            this.totalvalue2Label.Text = "$0";
             // 
             // totalvalue3Label
             // 
             this.totalvalue3Label.AutoSize = true;
             this.totalvalue3Label.Location = new System.Drawing.Point(563, 199);
             this.totalvalue3Label.Name = "totalvalue3Label";
-            this.totalvalue3Label.Size = new System.Drawing.Size(49, 20);
+            this.totalvalue3Label.Size = new System.Drawing.Size(27, 20);
             this.totalvalue3Label.TabIndex = 18;
-            this.totalvalue3Label.Text = "$0.00";
+            this.totalvalue3Label.Text = "$0";
             // 
             // totalvalue4Label
             // 
             this.totalvalue4Label.AutoSize = true;
             this.totalvalue4Label.Location = new System.Drawing.Point(563, 248);
             this.totalvalue4Label.Name = "totalvalue4Label";
-            this.totalvalue4Label.Size = new System.Drawing.Size(49, 20);
+            this.totalvalue4Label.Size = new System.Drawing.Size(27, 20);
             this.totalvalue4Label.TabIndex = 19;
-            this.totalvalue4Label.Text = "$0.00";
+            this.totalvalue4Label.Text = "$0";
             // 
             // profiletotalLabel
             // 
@@ -185,7 +185,7 @@
             this.profiletotalLabel.Name = "profiletotalLabel";
             this.profiletotalLabel.Size = new System.Drawing.Size(350, 23);
             this.profiletotalLabel.TabIndex = 20;
-            this.profiletotalLabel.Text = "Profile Total: $0.00";
+            this.profiletotalLabel.Text = "Profile Total: $0";
             this.profiletotalLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // StockProfile
