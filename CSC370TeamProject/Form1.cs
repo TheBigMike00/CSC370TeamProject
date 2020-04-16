@@ -20,9 +20,11 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using AlphaVantage.Net.Stocks;
 using AlphaVantage.Net.Stocks.TimeSeries;
+using ServiceStack;
+using ServiceStack.Text;
 using Microsoft.Office.Interop.Excel;
 using _Excel = Microsoft.Office.Interop.Excel;
-
+using System.IO;
 
 namespace CSC370TeamProject
 {
@@ -36,30 +38,32 @@ namespace CSC370TeamProject
             InitializeComponent();
         }
 
-        public async Task AlphaVantageStocksDemo()
+        public void AlphaVantageStocksDemo()
         {
-            string apiKey = "S5TJJRN8PSP31YVU"; // enter your API key here
-            var client = new AlphaVantageStocksClient(apiKey); 
-            for (int i = 0; i < 4; i++)
+            try
             {
-                // retrieve daily time series for given stocks
-                if (myStocks[i].getName() == null)
+                string apiKey = "S5TJJRN8PSP31YVU"; // enter your API key here
+                for (int i = 0; i < 4; i++)
                 {
-                    continue;
+                    if (myStocks[i].getName() == null)
+                        continue;
+                    var symbol = myStocks[i].getName().ToUpper();
+                    var dailyPrices = $"https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={symbol}&apikey={apiKey}&datatype=csv"
+                                        .GetStringFromUrl().FromCsv<List<AlphaVantageData>>();
+                    //Grabs data from AlphaVantage for us to use and display
+                    dailyPrices.PrintDump();
+                    // some simple stats
+                    var maxPrice = dailyPrices.Max(u => u.Close);
+                    var minPrice = dailyPrices.Min(u => u.Close);
+                    double average = (double)((maxPrice + minPrice) / 2);
+                    myStocks[i].setCurrentPrice(average);
+                    excel.writeToCell(i + 2, 3, Convert.ToString(myStocks[i].getCurrentPrice()));
                 }
-                StockTimeSeries timeSeries = await client.RequestDailyTimeSeriesAsync(myStocks[i].getName(),
-                    TimeSeriesSize.Compact, adjusted: false);
-
-                foreach (var dataPoint in timeSeries.DataPoints)
-                {
-                    myStocks[i].setCurrentPrice((double)(dataPoint.ClosingPrice));
-                    //Break used to only acess one data entry or else gets past 100 days
-                    break;
-                }
-                excel.writeToCell(i + 2, 3, Convert.ToString(myStocks[i].getCurrentPrice()));
             }
-            
-
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error on stock input, ensure all stocks symbols are entered correctly", "Error on Input");
+            }
         }
 
         public void defineLabels()
@@ -198,14 +202,86 @@ namespace CSC370TeamProject
             }
         }
 
+        public void transferDataToUser(Excel usrExcel)
+        {
+            int counter = 1;
+            while (usrExcel.readCell(counter, 1) == null)
+                counter += 10;
+
+            usrExcel.writeToCell(counter, 1, DateTime.Now.ToString());
+            for(int i = 1 + counter; i< 6 + counter; i++)
+            {
+                    for (int k = 1; k < 5; k++)
+                    {
+                        usrExcel.writeToCell(i, k, excel.readCell(i-(counter+1), k));
+                    }
+            }
+            usrExcel.writeToCell(counter + 8, 1, "Total Portfolio: ");
+            usrExcel.writeToCell(counter + 8, 2, Convert.ToString(getProfileTotal()));
+        }
+
         private void enterButton_Click(object sender, EventArgs e)
         {
             ClearData();
             updateWorkingData();
             AlphaVantageStocksDemo();
             defineLabels();
-            excel.Close();
         }
+
+        private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            bool isFirstSave = false;
+            if (myGlobals.usrFilePath == null)
+                isFirstSave = true;
+            Form2 saveMenu = new Form2();
+            saveMenu.ShowDialog();
+            if (isFirstSave)
+            {
+                Excel usrExcel = new Excel();
+                usrExcel.CreateNewFile();
+                transferDataToUser(usrExcel);
+                usrExcel.SaveAs(@"" + myGlobals.usrFilePath);
+                usrExcel.Close();
+            }
+            else
+            {
+                Excel usrExcel = new Excel(@"" + myGlobals.usrFilePath, 1);
+                transferDataToUser(usrExcel);
+                usrExcel.Save();
+                usrExcel.Close();
+            }
+        }
+
+        private void openToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if(myGlobals.usrFilePath == null)
+            {
+                MessageBox.Show("No path to stock records are saved.", "No Path Saved");
+            }
+            else
+            {
+                FileInfo fi = new FileInfo(@"" + myGlobals.usrFilePath);
+                if (fi.Exists)
+                {
+                    System.Diagnostics.Process.Start(@"" + myGlobals.usrFilePath);
+                }
+                else
+                {
+                    MessageBox.Show("Unable to locate file with given name:\n" + myGlobals.usrFilePath, "Error Locating File");
+                }
+            }
+        }
+    }
+
+    public class AlphaVantageData
+    {
+        //getters and setters for easy future access
+        public DateTime Timestamp { get; set; }
+        public decimal Open { get; set; }
+        public decimal High { get; set; }
+        public decimal Low { get; set; }
+        public decimal Close { get; set; }
+        public decimal Volume { get; set; }
     }
 
     public class Stock
@@ -260,6 +336,11 @@ namespace CSC370TeamProject
             ws = wb.Worksheets[sheet];
         }
 
+        public Excel()
+        {
+
+        }
+
         public string readCell(int x, int y)
         {
             return Convert.ToString(ws.Cells[x, y].Value2);
@@ -268,6 +349,17 @@ namespace CSC370TeamProject
         public void writeToCell(int x, int y, string newVal)
         {
             ws.Cells[x, y].Value2 = newVal;
+        }
+
+        public void CreateNewFile()
+        {
+            this.wb = excel.Workbooks.Add(XlWBATemplate.xlWBATWorksheet);
+            this.ws = wb.Worksheets[1];
+        }
+
+        public void CreateNewSheet()
+        {
+            Worksheet tempSheet = wb.Worksheets.Add(After: ws);
         }
 
         public void Save()
@@ -286,4 +378,9 @@ namespace CSC370TeamProject
             excel.Quit();
         }
     }
+}
+
+public static class myGlobals
+{
+    public static string usrFilePath;
 }
