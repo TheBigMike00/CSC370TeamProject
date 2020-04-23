@@ -50,6 +50,11 @@
             this.saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.currentValueLabel = new System.Windows.Forms.Label();
+            this.currentvalue1Label = new System.Windows.Forms.Label();
+            this.currentvalue2Label = new System.Windows.Forms.Label();
+            this.currentvalue3Label = new System.Windows.Forms.Label();
+            this.currentvalue4Label = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -83,7 +88,7 @@
             // totalvalueLabel
             // 
             this.totalvalueLabel.AutoSize = true;
-            this.totalvalueLabel.Location = new System.Drawing.Point(553, 52);
+            this.totalvalueLabel.Location = new System.Drawing.Point(646, 52);
             this.totalvalueLabel.Name = "totalvalueLabel";
             this.totalvalueLabel.Size = new System.Drawing.Size(117, 20);
             this.totalvalueLabel.TabIndex = 3;
@@ -151,7 +156,7 @@
             // totalvalue1Label
             // 
             this.totalvalue1Label.AutoSize = true;
-            this.totalvalue1Label.Location = new System.Drawing.Point(563, 97);
+            this.totalvalue1Label.Location = new System.Drawing.Point(676, 97);
             this.totalvalue1Label.Name = "totalvalue1Label";
             this.totalvalue1Label.Size = new System.Drawing.Size(27, 20);
             this.totalvalue1Label.TabIndex = 16;
@@ -160,7 +165,7 @@
             // totalvalue2Label
             // 
             this.totalvalue2Label.AutoSize = true;
-            this.totalvalue2Label.Location = new System.Drawing.Point(563, 150);
+            this.totalvalue2Label.Location = new System.Drawing.Point(676, 150);
             this.totalvalue2Label.Name = "totalvalue2Label";
             this.totalvalue2Label.Size = new System.Drawing.Size(27, 20);
             this.totalvalue2Label.TabIndex = 17;
@@ -169,7 +174,7 @@
             // totalvalue3Label
             // 
             this.totalvalue3Label.AutoSize = true;
-            this.totalvalue3Label.Location = new System.Drawing.Point(563, 199);
+            this.totalvalue3Label.Location = new System.Drawing.Point(676, 196);
             this.totalvalue3Label.Name = "totalvalue3Label";
             this.totalvalue3Label.Size = new System.Drawing.Size(27, 20);
             this.totalvalue3Label.TabIndex = 18;
@@ -178,7 +183,7 @@
             // totalvalue4Label
             // 
             this.totalvalue4Label.AutoSize = true;
-            this.totalvalue4Label.Location = new System.Drawing.Point(563, 248);
+            this.totalvalue4Label.Location = new System.Drawing.Point(676, 245);
             this.totalvalue4Label.Name = "totalvalue4Label";
             this.totalvalue4Label.Size = new System.Drawing.Size(27, 20);
             this.totalvalue4Label.TabIndex = 19;
@@ -220,7 +225,7 @@
             // 
             this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
             this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
-            this.saveAsToolStripMenuItem.Text = "Save As";
+            this.saveAsToolStripMenuItem.Text = "Save";
             this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.saveAsToolStripMenuItem_Click);
             // 
             // openToolStripMenuItem
@@ -236,12 +241,62 @@
             this.helpToolStripMenuItem.Size = new System.Drawing.Size(65, 29);
             this.helpToolStripMenuItem.Text = "Help";
             // 
+            // currentValueLabel
+            // 
+            this.currentValueLabel.AutoSize = true;
+            this.currentValueLabel.Location = new System.Drawing.Point(484, 52);
+            this.currentValueLabel.Name = "currentValueLabel";
+            this.currentValueLabel.Size = new System.Drawing.Size(145, 20);
+            this.currentValueLabel.TabIndex = 22;
+            this.currentValueLabel.Text = "CURRENT VALUE";
+            // 
+            // currentvalue1Label
+            // 
+            this.currentvalue1Label.AutoSize = true;
+            this.currentvalue1Label.Location = new System.Drawing.Point(546, 97);
+            this.currentvalue1Label.Name = "currentvalue1Label";
+            this.currentvalue1Label.Size = new System.Drawing.Size(27, 20);
+            this.currentvalue1Label.TabIndex = 23;
+            this.currentvalue1Label.Text = "$0";
+            // 
+            // currentvalue2Label
+            // 
+            this.currentvalue2Label.AutoSize = true;
+            this.currentvalue2Label.Location = new System.Drawing.Point(546, 150);
+            this.currentvalue2Label.Name = "currentvalue2Label";
+            this.currentvalue2Label.Size = new System.Drawing.Size(27, 20);
+            this.currentvalue2Label.TabIndex = 24;
+            this.currentvalue2Label.Text = "$0";
+            // 
+            // currentvalue3Label
+            // 
+            this.currentvalue3Label.AutoSize = true;
+            this.currentvalue3Label.Location = new System.Drawing.Point(546, 196);
+            this.currentvalue3Label.Name = "currentvalue3Label";
+            this.currentvalue3Label.Size = new System.Drawing.Size(27, 20);
+            this.currentvalue3Label.TabIndex = 25;
+            this.currentvalue3Label.Text = "$0";
+            // 
+            // currentvalue4Label
+            // 
+            this.currentvalue4Label.AutoSize = true;
+            this.currentvalue4Label.Location = new System.Drawing.Point(546, 245);
+            this.currentvalue4Label.Name = "currentvalue4Label";
+            this.currentvalue4Label.Size = new System.Drawing.Size(27, 20);
+            this.currentvalue4Label.TabIndex = 26;
+            this.currentvalue4Label.Text = "$0";
+            // 
             // StockProfile
             // 
             this.AcceptButton = this.enterButton;
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.currentvalue4Label);
+            this.Controls.Add(this.currentvalue3Label);
+            this.Controls.Add(this.currentvalue2Label);
+            this.Controls.Add(this.currentvalue1Label);
+            this.Controls.Add(this.currentValueLabel);
             this.Controls.Add(this.profiletotalLabel);
             this.Controls.Add(this.totalvalue4Label);
             this.Controls.Add(this.totalvalue3Label);
@@ -294,6 +349,11 @@
         private System.Windows.Forms.ToolStripMenuItem saveAsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem openToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
+        private System.Windows.Forms.Label currentValueLabel;
+        private System.Windows.Forms.Label currentvalue1Label;
+        private System.Windows.Forms.Label currentvalue2Label;
+        private System.Windows.Forms.Label currentvalue3Label;
+        private System.Windows.Forms.Label currentvalue4Label;
     }
 }
 

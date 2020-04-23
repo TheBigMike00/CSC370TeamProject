@@ -1,13 +1,20 @@
-﻿//CSC370 Team Project Sprint1; Justin J, Derek R, Mike B; 4/7/2020
+﻿//CSC370 Team Project Sprint3; Justin J, Derek R, Mike B; 4/23/2020
 //Purpose: Create an application which allows the user to input up to 4 separate stocks
 //and track the profile's total value. Catch common user input errors and handle 
-//accordingly. 
-//API Implementation reference: https://github.com/LutsenkoKirill/AlphaVantage.Net
-//Known Bugs: 1) sometimes there is a delay for the API to retieve the stock prices which 
-//              cause some stocks to display correctly and others  to remain at current price
-//          2) The try-catch to catch when an invalid stock name is inputed sometimes fires
-//              even if all names are valid
-//          3) Occasional unexpexted freezes of the app after an extended period of time.
+//accordingly. Allow option to save/open stock history.
+//Known Bugs: 1) Previous bugs from sprint 2 are corrected; however, sometimes the internal
+//              excel sheets do not close automatically. Not a huge issue but will need to be attended to
+//              in the following sprint
+//
+//Sprint 3 Specs Completed: 
+//      1.) each “save” of the portfolio produces a new record
+//              - see the saveAsToolStripMenuItem_Click method
+//      2.) ensure the app is robust (trapping and alerting the user on invalid data)
+//              - additional error tracking throughout the app. For example, the user is notified
+//                  when enter is selected with zero inputs
+//      3.) each “open” of the portfolio results in an update of the portfolio (eg, total value)
+//              -everytime open button is selected the app updates the user historical record file
+//                  automatically without the need to directly save the file. 
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -30,7 +37,9 @@ namespace CSC370TeamProject
 {
     public partial class StockProfile : Form
     {
+        //Create a global excel. This excel is kept within the debug folder and is used to store data under the hood.
         Excel excel = new Excel(System.AppDomain.CurrentDomain.BaseDirectory + "MyData.xlsx", 1);
+        //Global array of stocks allows for easier access to stock information throghout the program.
         Stock[] myStocks = new Stock[4];
 
         public StockProfile()
@@ -47,15 +56,18 @@ namespace CSC370TeamProject
                 {
                     if (myStocks[i].getName() == null)
                         continue;
+
+                    //accesses the value of the stock with appreviation 'symbol' 
                     var symbol = myStocks[i].getName().ToUpper();
                     var dailyPrices = $"https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={symbol}&apikey={apiKey}&datatype=csv"
                                         .GetStringFromUrl().FromCsv<List<AlphaVantageData>>();
-                    //Grabs data from AlphaVantage for us to use and display
                     dailyPrices.PrintDump();
-                    // some simple stats
+                    
+                    //grabs the min and max values of the stock for a given day and produces the average
+                    //which is used thoughout the program.
                     var maxPrice = dailyPrices.Max(u => u.Close);
                     var minPrice = dailyPrices.Min(u => u.Close);
-                    double average = (double)((maxPrice + minPrice) / 2);
+                    double average = Math.Round((double)((maxPrice + minPrice) / 2), 2);
                     myStocks[i].setCurrentPrice(average);
                     excel.writeToCell(i + 2, 3, Convert.ToString(myStocks[i].getCurrentPrice()));
                 }
@@ -63,6 +75,10 @@ namespace CSC370TeamProject
             catch (Exception ex)
             {
                 MessageBox.Show("Error on stock input, ensure all stocks symbols are entered correctly", "Error on Input");
+            }
+            if (myStocks[0].getName() == null && myStocks[1].getName() == null && myStocks[2].getName() == null && myStocks[3].getName() == null)
+            {
+                MessageBox.Show("No stocks were entered. Please enter a stock and its quantity.", "No Inputs");
             }
         }
 
@@ -72,32 +88,36 @@ namespace CSC370TeamProject
             //and catch an 'error' when the user decides to leave text boxes empty
             if (stock1TB.Text != "")
             {
-                totalvalue1Label.Text = "$" + (myStocks[0].getTotal());
-                excel.writeToCell(2, 4, Convert.ToString(myStocks[0].getTotal()));
+                totalvalue1Label.Text = "$" + String.Format("{0:0.00}", (myStocks[0].getTotal()));
+                currentvalue1Label.Text = "$" + String.Format("{0:0.00}", (myStocks[0].getCurrentPrice()));
+                excel.writeToCell(2, 4, String.Format("{0:0.00}", Convert.ToString(myStocks[0].getTotal())));
             }
             if (stock2TB.Text != "")
             {
-                totalvalue2Label.Text = "$" + (myStocks[1].getTotal());
-                excel.writeToCell(3, 4, Convert.ToString(myStocks[1].getTotal()));
+                totalvalue2Label.Text = "$" + String.Format("{0:0.00}", (myStocks[1].getTotal()));
+                currentvalue2Label.Text = "$" + String.Format("{0:0.00}", (myStocks[1].getCurrentPrice()));
+                excel.writeToCell(3, 4, String.Format("{0:0.00}", Convert.ToString(myStocks[1].getTotal())));
             }
             if (stock3TB.Text != "")
             {
-                totalvalue3Label.Text = "$" + (myStocks[2].getTotal());
-                excel.writeToCell(4, 4, Convert.ToString(myStocks[2].getTotal()));
+                totalvalue3Label.Text = "$" + String.Format("{0:0.00}", (myStocks[2].getTotal()));
+                currentvalue3Label.Text = "$" + String.Format("{0:0.00}", (myStocks[2].getCurrentPrice()));
+                excel.writeToCell(4, 4, String.Format("{0:0.00}", Convert.ToString(myStocks[2].getTotal())));
             }
             if (stock4TB.Text != "")
             {
-                totalvalue4Label.Text = "$" + (myStocks[3].getTotal());
-                excel.writeToCell(5, 4, Convert.ToString(myStocks[3].getTotal()));
+                totalvalue4Label.Text = "$" + String.Format("{0:0.00}", (myStocks[3].getTotal()));
+                currentvalue4Label.Text = "$" + String.Format("{0:0.00}", (myStocks[3].getCurrentPrice()));
+                excel.writeToCell(5, 4, String.Format("{0:0.00}", Convert.ToString(myStocks[3].getTotal())));
             }
-            profiletotalLabel.Text = "Profile Total: $" + getProfileTotal();
+            profiletotalLabel.Text = "Profile Total: $" + String.Format("{0:0.00}", getProfileTotal());
         }
 
         public void updateWorkingData()
         {
             try
             {
-                //ensures values exist before assigning to arrays
+                //ensures values exist before assigning to stock array and excel sheet.
                 //otherwise hardcodes known values which are dealt with throughout the 
                 //the program to avoid fatal errors
                 if (stock1TB.Text != "" && quantity1TB.Text != "")
@@ -183,6 +203,7 @@ namespace CSC370TeamProject
 
         public double getProfileTotal()
         {
+            //provides convenient access to the profile total throughout the program
             double valToReturn = 0;
             for (int i = 2; i < 6; i++)
             {
@@ -193,6 +214,7 @@ namespace CSC370TeamProject
 
         public void ClearData()
         {
+            //gives us ability to essentially 'reset' the internal excel sheet. 
             for(int x = 2; x<6; x++)
             {
                 for(int y = 1; y<5; y++)
@@ -204,8 +226,12 @@ namespace CSC370TeamProject
 
         public void transferDataToUser(Excel usrExcel)
         {
+            //This is where the main benefit of the internal excel sheet comes in. The method
+            //looks in an excel sheet to find the next empty set of cells and copies the current 
+            //internal excel sheet to the provided tree. This method aids in saving the current portfolio 
+            //in a user excel.
             int counter = 1;
-            while (usrExcel.readCell(counter, 1) == null)
+            while (usrExcel.readCell(counter, 1) != null)
                 counter += 10;
 
             usrExcel.writeToCell(counter, 1, DateTime.Now.ToString());
@@ -213,11 +239,11 @@ namespace CSC370TeamProject
             {
                     for (int k = 1; k < 5; k++)
                     {
-                        usrExcel.writeToCell(i, k, excel.readCell(i-(counter+1), k));
+                        usrExcel.writeToCell(i, k, excel.readCell(i-(counter), k));
                     }
             }
-            usrExcel.writeToCell(counter + 8, 1, "Total Portfolio: ");
-            usrExcel.writeToCell(counter + 8, 2, Convert.ToString(getProfileTotal()));
+            usrExcel.writeToCell(counter + 7, 1, "Total Portfolio: ");
+            usrExcel.writeToCell(counter + 7, 2, Convert.ToString(getProfileTotal()));
         }
 
         private void enterButton_Click(object sender, EventArgs e)
@@ -230,45 +256,28 @@ namespace CSC370TeamProject
 
         private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            bool isFirstSave = false;
-            if (myGlobals.usrFilePath == null)
-                isFirstSave = true;
-            Form2 saveMenu = new Form2();
-            saveMenu.ShowDialog();
-            if (isFirstSave)
-            {
-                Excel usrExcel = new Excel();
-                usrExcel.CreateNewFile();
-                transferDataToUser(usrExcel);
-                usrExcel.SaveAs(@"" + myGlobals.usrFilePath);
-                usrExcel.Close();
-            }
-            else
-            {
-                Excel usrExcel = new Excel(@"" + myGlobals.usrFilePath, 1);
-                transferDataToUser(usrExcel);
-                usrExcel.Save();
-                usrExcel.Close();
-            }
+            //saves data to the user's historical excel sheet 
+            Excel usrExcel = new Excel(System.AppDomain.CurrentDomain.BaseDirectory + "UserData.xlsx", 1);
+            transferDataToUser(usrExcel);
+            usrExcel.Save();
+            usrExcel.Close();
         }
 
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if(myGlobals.usrFilePath == null)
+            Excel usrExcel = new Excel(System.AppDomain.CurrentDomain.BaseDirectory + "UserData.xlsx", 1);
+            transferDataToUser(usrExcel);
+            usrExcel.Save();
+            usrExcel.Close();
+            FileInfo fi = new FileInfo(System.AppDomain.CurrentDomain.BaseDirectory + "UserData.xlsx");
+            if (fi.Exists)
             {
-                MessageBox.Show("No path to stock records are saved.", "No Path Saved");
+                //                                                   
+                System.Diagnostics.Process.Start(System.AppDomain.CurrentDomain.BaseDirectory + "UserData.xlsx");
             }
             else
             {
-                FileInfo fi = new FileInfo(@"" + myGlobals.usrFilePath);
-                if (fi.Exists)
-                {
-                    System.Diagnostics.Process.Start(@"" + myGlobals.usrFilePath);
-                }
-                else
-                {
-                    MessageBox.Show("Unable to locate file with given name:\n" + myGlobals.usrFilePath, "Error Locating File");
-                }
+                MessageBox.Show("Unable to locate file", "Error Locating File");
             }
         }
     }
@@ -286,6 +295,8 @@ namespace CSC370TeamProject
 
     public class Stock
     {
+        //stock class allows for creation of stock objects for easy access to 
+        //various information about the stocks.
         private string name;
         private int quantity;
         private double currPrice;
@@ -324,6 +335,7 @@ namespace CSC370TeamProject
 
     public class Excel
     {
+        //class which allows for the creation and management of excel files
         string path = "";
         _Application excel = new _Excel.Application();
         Workbook wb;
@@ -378,9 +390,4 @@ namespace CSC370TeamProject
             excel.Quit();
         }
     }
-}
-
-public static class myGlobals
-{
-    public static string usrFilePath;
 }
