@@ -37,17 +37,17 @@ namespace CSC370TeamProject
 {
     public partial class StockProfile : Form
     {
-        //Create a global excel. This excel is kept within the debug folder and is used to store data under the hood.
-        Excel excel = new Excel(System.AppDomain.CurrentDomain.BaseDirectory + "MyData.xlsx", 1);
         //Global array of stocks allows for easier access to stock information throghout the program.
         Stock[] myStocks = new Stock[4];
-
         public StockProfile()
         {
             InitializeComponent();
+            if (myGlobals.isDataLoaded != true)
+                myGlobals.isDataLoaded = false;
+
         }
 
-        public void AlphaVantageStocksDemo()
+        public void AlphaVantageStocksDemo(Excel excel)
         {
             try
             {
@@ -82,7 +82,7 @@ namespace CSC370TeamProject
             }
         }
 
-        public void defineLabels()
+        public void defineLabels(Excel excel)
         {
             //if/else statements used to correctly fill the 'totalvalue' labels
             //and catch an 'error' when the user decides to leave text boxes empty
@@ -110,10 +110,10 @@ namespace CSC370TeamProject
                 currentvalue4Label.Text = "$" + String.Format("{0:0.00}", (myStocks[3].getCurrentPrice()));
                 excel.writeToCell(5, 4, String.Format("{0:0.00}", Convert.ToString(myStocks[3].getTotal())));
             }
-            profiletotalLabel.Text = "Profile Total: $" + String.Format("{0:0.00}", getProfileTotal());
+            profiletotalLabel.Text = "Profile Total: $" + String.Format("{0:0.00}", getProfileTotal(excel));
         }
 
-        public void updateWorkingData()
+        public void updateWorkingData(Excel excel)
         {
             try
             {
@@ -133,8 +133,8 @@ namespace CSC370TeamProject
                 } 
                 else
                 {
-                    excel.writeToCell(2,1, "");
-                    excel.writeToCell(2,2, "0");
+                    excel.writeToCell(2, 1, "");
+                    excel.writeToCell(2, 2, "");
                 }
 
                 if (stock2TB.Text != "" && quantity2TB.Text != "")
@@ -151,7 +151,7 @@ namespace CSC370TeamProject
                 else
                 {
                     excel.writeToCell(3,1, "");
-                    excel.writeToCell(3,2, "0");
+                    excel.writeToCell(3,2, "");
                 }
 
                 if (stock3TB.Text != "" && quantity3TB.Text != "")
@@ -168,7 +168,7 @@ namespace CSC370TeamProject
                 else
                 {
                     excel.writeToCell(4,1, "");
-                    excel.writeToCell(4,2, "0");
+                    excel.writeToCell(4,2, "");
                 }
 
                 if (stock4TB.Text != "" && quantity4TB.Text != "")
@@ -185,7 +185,7 @@ namespace CSC370TeamProject
                 else
                 {
                     excel.writeToCell(5,1, "");
-                    excel.writeToCell(5,2, "0");
+                    excel.writeToCell(5,2, "");
                 }
             }
             catch(Exception ex)
@@ -201,7 +201,7 @@ namespace CSC370TeamProject
             }
         }
 
-        public double getProfileTotal()
+        public double getProfileTotal(Excel excel)
         {
             //provides convenient access to the profile total throughout the program
             double valToReturn = 0;
@@ -212,10 +212,10 @@ namespace CSC370TeamProject
             return valToReturn;
         }
 
-        public void ClearData()
+        public void ClearData(Excel excel)
         {
             //gives us ability to essentially 'reset' the internal excel sheet. 
-            for(int x = 2; x<6; x++)
+            for (int x = 2; x<6; x++)
             {
                 for(int y = 1; y<5; y++)
                 {
@@ -224,7 +224,7 @@ namespace CSC370TeamProject
             }
         }
 
-        public void transferDataToUser(Excel usrExcel)
+        public void transferDataToUser(Excel usrExcel, Excel excel)
         {
             //This is where the main benefit of the internal excel sheet comes in. The method
             //looks in an excel sheet to find the next empty set of cells and copies the current 
@@ -243,32 +243,36 @@ namespace CSC370TeamProject
                     }
             }
             usrExcel.writeToCell(counter + 7, 1, "Total Portfolio: ");
-            usrExcel.writeToCell(counter + 7, 2, Convert.ToString(getProfileTotal()));
+            usrExcel.writeToCell(counter + 7, 2, Convert.ToString(getProfileTotal(excel)));
         }
 
         private void enterButton_Click(object sender, EventArgs e)
         {
-            ClearData();
-            updateWorkingData();
-            AlphaVantageStocksDemo();
-            defineLabels();
+            Excel excel = new Excel(System.AppDomain.CurrentDomain.BaseDirectory + "MyData.xlsx", 1);
+            ClearData(excel);
+            updateWorkingData(excel);
+            AlphaVantageStocksDemo(excel);
+            defineLabels(excel);
+            excel.Save();
+            excel.Close();
         }
 
         private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             //saves data to the user's historical excel sheet 
             Excel usrExcel = new Excel(System.AppDomain.CurrentDomain.BaseDirectory + "UserData.xlsx", 1);
-            transferDataToUser(usrExcel);
+            Excel excel = new Excel(System.AppDomain.CurrentDomain.BaseDirectory + "MyData.xlsx", 1);
+            transferDataToUser(usrExcel, excel);
             usrExcel.Save();
             usrExcel.Close();
+            excel.Save();
+            excel.Close();
+            myGlobals.isDataLoaded = true;
+
         }
 
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Excel usrExcel = new Excel(System.AppDomain.CurrentDomain.BaseDirectory + "UserData.xlsx", 1);
-            transferDataToUser(usrExcel);
-            usrExcel.Save();
-            usrExcel.Close();
             FileInfo fi = new FileInfo(System.AppDomain.CurrentDomain.BaseDirectory + "UserData.xlsx");
             if (fi.Exists)
             {
@@ -279,6 +283,91 @@ namespace CSC370TeamProject
             {
                 MessageBox.Show("Unable to locate file", "Error Locating File");
             }
+        }
+
+        public void recordHistoricalVals()
+        {
+            Excel usrExcel = new Excel(System.AppDomain.CurrentDomain.BaseDirectory + "UserData.xlsx", 1);
+            Excel histExcel = new Excel(System.AppDomain.CurrentDomain.BaseDirectory + "HistoricalProfileValues.xlsx", 1);
+            myGlobals.historicVals = new ArrayList();
+            myGlobals.historicTimestamps = new ArrayList();
+            int counter = 1;
+            while (usrExcel.readCell(counter, 1) != null)
+            {
+                counter += 10;
+                if (usrExcel.readCell(counter + 7, 2) != null)
+                {
+                    myGlobals.historicVals.Add(usrExcel.readCell(counter + 7, 2));
+                    myGlobals.historicTimestamps.Add(Convert.ToString(usrExcel.readCell(counter, 1)));
+                    int track = 1;
+                    while (histExcel.readCell(track, 1) != null)
+                        track++;
+                    histExcel.writeToCell(track, 1, usrExcel.readCell(counter, 1));
+                    histExcel.writeToCell(track, 2, usrExcel.readCell(counter + 7, 2));
+                }
+            }
+            usrExcel.Close();
+            histExcel.Save();
+            histExcel.Close();
+        }
+
+        private void myProfileButton_Click(object sender, EventArgs e)
+        {
+            Excel excel = new Excel(System.AppDomain.CurrentDomain.BaseDirectory + "MyData.xlsx", 1);
+            recordHistoricalVals();
+            excel.Save();
+            excel.Close();
+            this.Hide();
+            Form2 myProfile = new Form2();
+            myProfile.ShowDialog();
+            this.Close();
+        }
+
+        private void loadSavedStocksToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Excel usrExcel = new Excel(System.AppDomain.CurrentDomain.BaseDirectory + "UserData.xlsx", 1);
+            Excel excel = new Excel(System.AppDomain.CurrentDomain.BaseDirectory + "MyData.xlsx", 1);
+            int counter = 1;
+            while (usrExcel.readCell(counter, 1) != null)
+                counter += 10;
+
+            counter -= 10;
+            if (usrExcel.readCell(counter + 2, 1) == null)
+            {
+                myGlobals.isDataLoaded = false;
+                MessageBox.Show("There is no data saved. Please enter stocks and save to access in the future.", "Error");
+                usrExcel.Save();
+                usrExcel.Close();
+                excel.Save();
+                excel.Close();
+                return;
+            }
+            for (int i = 2 + counter; i < 6 + counter; i++)
+            {
+                for (int k = 1; k < 5; k++)
+                {
+                    excel.writeToCell(i - (counter), k, usrExcel.readCell(i, k));
+                }
+            }
+            stock1TB.Text = excel.readCell(2, 1);
+            stock2TB.Text = excel.readCell(3, 1);
+            stock3TB.Text = excel.readCell(4, 1);
+            stock4TB.Text = excel.readCell(5, 1);
+            quantity1TB.Text = excel.readCell(2, 2);
+            quantity2TB.Text = excel.readCell(3, 2);
+            quantity3TB.Text = excel.readCell(4, 2);
+            quantity4TB.Text = excel.readCell(5, 2);
+
+
+            usrExcel.Save();
+            usrExcel.Close();
+            ClearData(excel);
+            updateWorkingData(excel);
+            AlphaVantageStocksDemo(excel);
+            defineLabels(excel);
+            excel.Save();
+            excel.Close();
+
         }
     }
 
@@ -390,4 +479,11 @@ namespace CSC370TeamProject
             excel.Quit();
         }
     }
+
+}
+public static class myGlobals
+{
+    public static ArrayList historicVals;
+    public static ArrayList historicTimestamps;
+    public static bool isDataLoaded;
 }

@@ -55,12 +55,16 @@
             this.currentvalue2Label = new System.Windows.Forms.Label();
             this.currentvalue3Label = new System.Windows.Forms.Label();
             this.currentvalue4Label = new System.Windows.Forms.Label();
+            this.myStocksButton = new System.Windows.Forms.Button();
+            this.myProfileButton = new System.Windows.Forms.Button();
+            this.whatIfButton = new System.Windows.Forms.Button();
+            this.loadSavedStocksToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // stock1TB
             // 
-            this.stock1TB.Location = new System.Drawing.Point(147, 97);
+            this.stock1TB.Location = new System.Drawing.Point(126, 144);
             this.stock1TB.Name = "stock1TB";
             this.stock1TB.Size = new System.Drawing.Size(100, 26);
             this.stock1TB.TabIndex = 0;
@@ -68,7 +72,7 @@
             // stocksLabel
             // 
             this.stocksLabel.AutoSize = true;
-            this.stocksLabel.Location = new System.Drawing.Point(164, 52);
+            this.stocksLabel.Location = new System.Drawing.Point(143, 112);
             this.stocksLabel.Name = "stocksLabel";
             this.stocksLabel.Size = new System.Drawing.Size(62, 20);
             this.stocksLabel.TabIndex = 1;
@@ -78,7 +82,7 @@
             // quantityLabel
             // 
             this.quantityLabel.AutoSize = true;
-            this.quantityLabel.Location = new System.Drawing.Point(353, 52);
+            this.quantityLabel.Location = new System.Drawing.Point(317, 112);
             this.quantityLabel.Name = "quantityLabel";
             this.quantityLabel.Size = new System.Drawing.Size(89, 20);
             this.quantityLabel.TabIndex = 2;
@@ -88,7 +92,7 @@
             // totalvalueLabel
             // 
             this.totalvalueLabel.AutoSize = true;
-            this.totalvalueLabel.Location = new System.Drawing.Point(646, 52);
+            this.totalvalueLabel.Location = new System.Drawing.Point(629, 112);
             this.totalvalueLabel.Name = "totalvalueLabel";
             this.totalvalueLabel.Size = new System.Drawing.Size(117, 20);
             this.totalvalueLabel.TabIndex = 3;
@@ -96,56 +100,56 @@
             // 
             // quantity1TB
             // 
-            this.quantity1TB.Location = new System.Drawing.Point(342, 97);
+            this.quantity1TB.Location = new System.Drawing.Point(310, 144);
             this.quantity1TB.Name = "quantity1TB";
             this.quantity1TB.Size = new System.Drawing.Size(100, 26);
             this.quantity1TB.TabIndex = 4;
             // 
             // stock2TB
             // 
-            this.stock2TB.Location = new System.Drawing.Point(147, 144);
+            this.stock2TB.Location = new System.Drawing.Point(126, 190);
             this.stock2TB.Name = "stock2TB";
             this.stock2TB.Size = new System.Drawing.Size(100, 26);
             this.stock2TB.TabIndex = 6;
             // 
             // quantity2TB
             // 
-            this.quantity2TB.Location = new System.Drawing.Point(342, 144);
+            this.quantity2TB.Location = new System.Drawing.Point(310, 190);
             this.quantity2TB.Name = "quantity2TB";
             this.quantity2TB.Size = new System.Drawing.Size(100, 26);
             this.quantity2TB.TabIndex = 7;
             // 
             // stock3TB
             // 
-            this.stock3TB.Location = new System.Drawing.Point(147, 196);
+            this.stock3TB.Location = new System.Drawing.Point(126, 239);
             this.stock3TB.Name = "stock3TB";
             this.stock3TB.Size = new System.Drawing.Size(100, 26);
             this.stock3TB.TabIndex = 9;
             // 
             // quantity3TB
             // 
-            this.quantity3TB.Location = new System.Drawing.Point(342, 196);
+            this.quantity3TB.Location = new System.Drawing.Point(310, 239);
             this.quantity3TB.Name = "quantity3TB";
             this.quantity3TB.Size = new System.Drawing.Size(100, 26);
             this.quantity3TB.TabIndex = 10;
             // 
             // stock4TB
             // 
-            this.stock4TB.Location = new System.Drawing.Point(147, 246);
+            this.stock4TB.Location = new System.Drawing.Point(126, 287);
             this.stock4TB.Name = "stock4TB";
             this.stock4TB.Size = new System.Drawing.Size(100, 26);
             this.stock4TB.TabIndex = 12;
             // 
             // quantity4TB
             // 
-            this.quantity4TB.Location = new System.Drawing.Point(342, 245);
+            this.quantity4TB.Location = new System.Drawing.Point(310, 287);
             this.quantity4TB.Name = "quantity4TB";
             this.quantity4TB.Size = new System.Drawing.Size(100, 26);
             this.quantity4TB.TabIndex = 13;
             // 
             // enterButton
             // 
-            this.enterButton.Location = new System.Drawing.Point(342, 307);
+            this.enterButton.Location = new System.Drawing.Point(321, 332);
             this.enterButton.Name = "enterButton";
             this.enterButton.Size = new System.Drawing.Size(108, 34);
             this.enterButton.TabIndex = 15;
@@ -156,7 +160,7 @@
             // totalvalue1Label
             // 
             this.totalvalue1Label.AutoSize = true;
-            this.totalvalue1Label.Location = new System.Drawing.Point(676, 97);
+            this.totalvalue1Label.Location = new System.Drawing.Point(646, 150);
             this.totalvalue1Label.Name = "totalvalue1Label";
             this.totalvalue1Label.Size = new System.Drawing.Size(27, 20);
             this.totalvalue1Label.TabIndex = 16;
@@ -165,7 +169,7 @@
             // totalvalue2Label
             // 
             this.totalvalue2Label.AutoSize = true;
-            this.totalvalue2Label.Location = new System.Drawing.Point(676, 150);
+            this.totalvalue2Label.Location = new System.Drawing.Point(646, 196);
             this.totalvalue2Label.Name = "totalvalue2Label";
             this.totalvalue2Label.Size = new System.Drawing.Size(27, 20);
             this.totalvalue2Label.TabIndex = 17;
@@ -174,7 +178,7 @@
             // totalvalue3Label
             // 
             this.totalvalue3Label.AutoSize = true;
-            this.totalvalue3Label.Location = new System.Drawing.Point(676, 196);
+            this.totalvalue3Label.Location = new System.Drawing.Point(646, 245);
             this.totalvalue3Label.Name = "totalvalue3Label";
             this.totalvalue3Label.Size = new System.Drawing.Size(27, 20);
             this.totalvalue3Label.TabIndex = 18;
@@ -183,7 +187,7 @@
             // totalvalue4Label
             // 
             this.totalvalue4Label.AutoSize = true;
-            this.totalvalue4Label.Location = new System.Drawing.Point(676, 245);
+            this.totalvalue4Label.Location = new System.Drawing.Point(646, 293);
             this.totalvalue4Label.Name = "totalvalue4Label";
             this.totalvalue4Label.Size = new System.Drawing.Size(27, 20);
             this.totalvalue4Label.TabIndex = 19;
@@ -192,7 +196,7 @@
             // profiletotalLabel
             // 
             this.profiletotalLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.profiletotalLabel.Location = new System.Drawing.Point(223, 376);
+            this.profiletotalLabel.Location = new System.Drawing.Point(202, 391);
             this.profiletotalLabel.Name = "profiletotalLabel";
             this.profiletotalLabel.Size = new System.Drawing.Size(350, 23);
             this.profiletotalLabel.TabIndex = 20;
@@ -216,6 +220,7 @@
             // 
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.saveAsToolStripMenuItem,
+            this.loadSavedStocksToolStripMenuItem,
             this.openToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(54, 29);
@@ -232,7 +237,7 @@
             // 
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
             this.openToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
-            this.openToolStripMenuItem.Text = "Open";
+            this.openToolStripMenuItem.Text = "Open Excel";
             this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
             // 
             // helpToolStripMenuItem
@@ -244,7 +249,7 @@
             // currentValueLabel
             // 
             this.currentValueLabel.AutoSize = true;
-            this.currentValueLabel.Location = new System.Drawing.Point(484, 52);
+            this.currentValueLabel.Location = new System.Drawing.Point(462, 112);
             this.currentValueLabel.Name = "currentValueLabel";
             this.currentValueLabel.Size = new System.Drawing.Size(145, 20);
             this.currentValueLabel.TabIndex = 22;
@@ -253,7 +258,7 @@
             // currentvalue1Label
             // 
             this.currentvalue1Label.AutoSize = true;
-            this.currentvalue1Label.Location = new System.Drawing.Point(546, 97);
+            this.currentvalue1Label.Location = new System.Drawing.Point(525, 147);
             this.currentvalue1Label.Name = "currentvalue1Label";
             this.currentvalue1Label.Size = new System.Drawing.Size(27, 20);
             this.currentvalue1Label.TabIndex = 23;
@@ -262,7 +267,7 @@
             // currentvalue2Label
             // 
             this.currentvalue2Label.AutoSize = true;
-            this.currentvalue2Label.Location = new System.Drawing.Point(546, 150);
+            this.currentvalue2Label.Location = new System.Drawing.Point(525, 193);
             this.currentvalue2Label.Name = "currentvalue2Label";
             this.currentvalue2Label.Size = new System.Drawing.Size(27, 20);
             this.currentvalue2Label.TabIndex = 24;
@@ -271,7 +276,7 @@
             // currentvalue3Label
             // 
             this.currentvalue3Label.AutoSize = true;
-            this.currentvalue3Label.Location = new System.Drawing.Point(546, 196);
+            this.currentvalue3Label.Location = new System.Drawing.Point(525, 242);
             this.currentvalue3Label.Name = "currentvalue3Label";
             this.currentvalue3Label.Size = new System.Drawing.Size(27, 20);
             this.currentvalue3Label.TabIndex = 25;
@@ -280,11 +285,48 @@
             // currentvalue4Label
             // 
             this.currentvalue4Label.AutoSize = true;
-            this.currentvalue4Label.Location = new System.Drawing.Point(546, 245);
+            this.currentvalue4Label.Location = new System.Drawing.Point(525, 293);
             this.currentvalue4Label.Name = "currentvalue4Label";
             this.currentvalue4Label.Size = new System.Drawing.Size(27, 20);
             this.currentvalue4Label.TabIndex = 26;
             this.currentvalue4Label.Text = "$0";
+            // 
+            // myStocksButton
+            // 
+            this.myStocksButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
+            this.myStocksButton.Location = new System.Drawing.Point(250, 50);
+            this.myStocksButton.Name = "myStocksButton";
+            this.myStocksButton.Size = new System.Drawing.Size(100, 45);
+            this.myStocksButton.TabIndex = 27;
+            this.myStocksButton.Text = "My Stocks";
+            this.myStocksButton.UseVisualStyleBackColor = false;
+            // 
+            // myProfileButton
+            // 
+            this.myProfileButton.Location = new System.Drawing.Point(350, 50);
+            this.myProfileButton.Name = "myProfileButton";
+            this.myProfileButton.Size = new System.Drawing.Size(100, 45);
+            this.myProfileButton.TabIndex = 28;
+            this.myProfileButton.Text = "My Profile";
+            this.myProfileButton.UseVisualStyleBackColor = true;
+            this.myProfileButton.Click += new System.EventHandler(this.myProfileButton_Click);
+            // 
+            // whatIfButton
+            // 
+            this.whatIfButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.whatIfButton.Location = new System.Drawing.Point(450, 50);
+            this.whatIfButton.Name = "whatIfButton";
+            this.whatIfButton.Size = new System.Drawing.Size(100, 45);
+            this.whatIfButton.TabIndex = 29;
+            this.whatIfButton.Text = "What If?";
+            this.whatIfButton.UseVisualStyleBackColor = true;
+            // 
+            // loadSavedStocksToolStripMenuItem
+            // 
+            this.loadSavedStocksToolStripMenuItem.Name = "loadSavedStocksToolStripMenuItem";
+            this.loadSavedStocksToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
+            this.loadSavedStocksToolStripMenuItem.Text = "Load Saved Stocks";
+            this.loadSavedStocksToolStripMenuItem.Click += new System.EventHandler(this.loadSavedStocksToolStripMenuItem_Click);
             // 
             // StockProfile
             // 
@@ -292,6 +334,9 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.whatIfButton);
+            this.Controls.Add(this.myProfileButton);
+            this.Controls.Add(this.myStocksButton);
             this.Controls.Add(this.currentvalue4Label);
             this.Controls.Add(this.currentvalue3Label);
             this.Controls.Add(this.currentvalue2Label);
@@ -317,7 +362,7 @@
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "StockProfile";
-            this.Text = "StockProfile";
+            this.Text = "MyStocks";
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
@@ -354,6 +399,10 @@
         private System.Windows.Forms.Label currentvalue2Label;
         private System.Windows.Forms.Label currentvalue3Label;
         private System.Windows.Forms.Label currentvalue4Label;
+        private System.Windows.Forms.Button myStocksButton;
+        private System.Windows.Forms.Button myProfileButton;
+        private System.Windows.Forms.Button whatIfButton;
+        private System.Windows.Forms.ToolStripMenuItem loadSavedStocksToolStripMenuItem;
     }
 }
 
