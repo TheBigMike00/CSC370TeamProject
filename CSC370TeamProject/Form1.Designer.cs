@@ -48,6 +48,7 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.loadSavedStocksToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.currentValueLabel = new System.Windows.Forms.Label();
@@ -58,7 +59,6 @@
             this.myStocksButton = new System.Windows.Forms.Button();
             this.myProfileButton = new System.Windows.Forms.Button();
             this.whatIfButton = new System.Windows.Forms.Button();
-            this.loadSavedStocksToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -233,6 +233,13 @@
             this.saveAsToolStripMenuItem.Text = "Save";
             this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.saveAsToolStripMenuItem_Click);
             // 
+            // loadSavedStocksToolStripMenuItem
+            // 
+            this.loadSavedStocksToolStripMenuItem.Name = "loadSavedStocksToolStripMenuItem";
+            this.loadSavedStocksToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
+            this.loadSavedStocksToolStripMenuItem.Text = "Load Saved Data";
+            this.loadSavedStocksToolStripMenuItem.Click += new System.EventHandler(this.loadSavedStocksToolStripMenuItem_Click);
+            // 
             // openToolStripMenuItem
             // 
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
@@ -320,13 +327,6 @@
             this.whatIfButton.TabIndex = 29;
             this.whatIfButton.Text = "What If?";
             this.whatIfButton.UseVisualStyleBackColor = true;
-            // 
-            // loadSavedStocksToolStripMenuItem
-            // 
-            this.loadSavedStocksToolStripMenuItem.Name = "loadSavedStocksToolStripMenuItem";
-            this.loadSavedStocksToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
-            this.loadSavedStocksToolStripMenuItem.Text = "Load Saved Stocks";
-            this.loadSavedStocksToolStripMenuItem.Click += new System.EventHandler(this.loadSavedStocksToolStripMenuItem_Click);
             // 
             // StockProfile
             // 

@@ -16,11 +16,17 @@ namespace CSC370TeamProject
         public Form2()
         {
             InitializeComponent();
+
+            //temporary...need to fix dates to display correctly
+            dateCreatedLabel.Visible = false;
+            dateCreatedTB.Visible = false;
             if (myGlobals.isDataLoaded)
             {
                 Excel usrExcel = new Excel(System.AppDomain.CurrentDomain.BaseDirectory + "UserData.xlsx", 1);
                 loadChart();
                 defineLabels(usrExcel);
+                usrExcel.Save();
+                usrExcel.Close();
             }
             
         }
@@ -34,27 +40,53 @@ namespace CSC370TeamProject
             myChart.AxisY.LabelStyle.Format = "";
             myChart.AxisX.LabelStyle.IsEndLabelVisible = true;
 
+            myChart.AxisX.Title = "Recent Save";
+            myChart.AxisY.Title = "Value ($USD)";
+
             myChart.AxisX.Minimum = 0;
             myChart.AxisY.Minimum = 0;
 
-            myChart.AxisY.Interval = 250;
-
+            double max = 0;
+            for (int i = 0; i<myGlobals.historicVals.Count-1; i++)
+            {
+                if(Convert.ToDouble(myGlobals.historicVals[i]) > max)
+                {
+                    max = Convert.ToDouble(myGlobals.historicVals[i]);
+                }
+            }
+            /*
+            int inter = 10;
+            while((inter*10) < max)
+            {
+                inter *= 10;
+            }
+            myChart.AxisY.Interval = inter;
+            */
             historicValChart.Series[0].IsVisibleInLegend = false;
             historicValChart.Series.Add("Value");
             historicValChart.Series["Value"].ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            historicValChart.Series["Value"].Color = Color.Green;
-
-            if (myGlobals.historicVals.Count >= 5)
+            double currentV = Convert.ToDouble(myGlobals.historicVals[myGlobals.historicVals.Count - 1]);
+            double initialV = Convert.ToDouble(myGlobals.historicVals[0]);
+            if (currentV >= initialV)
             {
-                historicValChart.Series["Value"].Points.AddXY(1, myGlobals.historicVals[myGlobals.historicVals.Count-5]);
-                historicValChart.Series["Value"].Points.AddXY(1, myGlobals.historicVals[myGlobals.historicVals.Count - 4]);
-                historicValChart.Series["Value"].Points.AddXY(1, myGlobals.historicVals[myGlobals.historicVals.Count - 3]);
-                historicValChart.Series["Value"].Points.AddXY(1, myGlobals.historicVals[myGlobals.historicVals.Count - 2]);
-                historicValChart.Series["Value"].Points.AddXY(1, myGlobals.historicVals[myGlobals.historicVals.Count - 1]);
+                historicValChart.Series["Value"].Color = Color.Green;
             }
             else
             {
-                for (int i = 1; i < myGlobals.historicVals.Count; i++)
+                historicValChart.Series["Value"].Color = Color.Red;
+            }
+
+            if (myGlobals.historicVals.Count >= 5)
+            {
+                historicValChart.Series["Value"].Points.AddXY(0, myGlobals.historicVals[myGlobals.historicVals.Count-5]);
+                historicValChart.Series["Value"].Points.AddXY(1, myGlobals.historicVals[myGlobals.historicVals.Count - 4]);
+                historicValChart.Series["Value"].Points.AddXY(2, myGlobals.historicVals[myGlobals.historicVals.Count - 3]);
+                historicValChart.Series["Value"].Points.AddXY(3, myGlobals.historicVals[myGlobals.historicVals.Count - 2]);
+                historicValChart.Series["Value"].Points.AddXY(4, myGlobals.historicVals[myGlobals.historicVals.Count - 1]);
+            }
+            else
+            {
+                for (int i = 0; i < myGlobals.historicVals.Count; i++)
                 {
                     historicValChart.Series["Value"].Points.AddXY(i, myGlobals.historicVals[i]);
                 }
@@ -69,10 +101,20 @@ namespace CSC370TeamProject
         {
             dateCreatedTB.Text = Convert.ToString(myGlobals.historicTimestamps[0]);
             initialInvestmentTB.Text = "$" + Convert.ToString(myGlobals.historicVals[0]);
-            currProfileValueLabel.Text = "$" + Convert.ToString(myGlobals.historicVals[myGlobals.historicVals.Count - 1]);
             double currentV = Convert.ToDouble(myGlobals.historicVals[myGlobals.historicVals.Count - 1]);
             double initialV = Convert.ToDouble(myGlobals.historicVals[0]);
-            percentChangeLabel.Text = Convert.ToString((currentV - initialV)/initialV );
+            if(currentV >= initialV)
+            {
+                currProfileValueLabel.ForeColor = System.Drawing.Color.Green;
+                percentChangeLabel.ForeColor = System.Drawing.Color.Green;
+            }
+            else
+            {
+                currProfileValueLabel.ForeColor = System.Drawing.Color.Red;
+                percentChangeLabel.ForeColor = System.Drawing.Color.Red;
+            }
+            currProfileValueLabel.Text = "$" + Convert.ToString(myGlobals.historicVals[myGlobals.historicVals.Count - 1]);
+            percentChangeLabel.Text = String.Format("{0:0.00}", Convert.ToString(((currentV - initialV) / initialV) * 100));
         }
 
         private void myStocksButton_Click(object sender, EventArgs e)
@@ -119,11 +161,13 @@ namespace CSC370TeamProject
                     return;
                 }
                 defineLabels(usrExcel);
+                loadChart();
             }
             else
             {
                 MessageBox.Show("Data Up to Date", "Notice");
             }
+            myGlobals.isDataLoaded = true;
             usrExcel.Save();
             excel.Save();
             usrExcel.Close();

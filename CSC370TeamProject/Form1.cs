@@ -1,20 +1,19 @@
-﻿//CSC370 Team Project Sprint3; Justin J, Derek R, Mike B; 4/23/2020
+﻿//CSC370 Team Project Sprint4; Justin J, Derek R, Mike B; 4/30/2020
 //Purpose: Create an application which allows the user to input up to 4 separate stocks
 //and track the profile's total value. Catch common user input errors and handle 
 //accordingly. Allow option to save/open stock history.
-//Known Bugs: 1) Previous bugs from sprint 2 are corrected; however, sometimes the internal
-//              excel sheets do not close automatically. Not a huge issue but will need to be attended to
-//              in the following sprint
+//Known Bugs: 1) Issues from previous prints attended to. There is a known bug where the arraylist of dates 
+//              is not being formatted correctly which will have to be attended to in the next sprint.
 //
 //Sprint 3 Specs Completed: 
-//      1.) each “save” of the portfolio produces a new record
-//              - see the saveAsToolStripMenuItem_Click method
-//      2.) ensure the app is robust (trapping and alerting the user on invalid data)
-//              - additional error tracking throughout the app. For example, the user is notified
-//                  when enter is selected with zero inputs
-//      3.) each “open” of the portfolio results in an update of the portfolio (eg, total value)
-//              -everytime open button is selected the app updates the user historical record file
-//                  automatically without the need to directly save the file. 
+//      1.) allow an option to list the historic value of the portfolio over time
+//              - see the Open data in excel option located in Form2
+//      2.) allow an option to produce a chart of the historic value over time
+//              - see the chart found in Form2
+//      2.5.) corrected the "open" command from previous sprint which now should be 
+//              funtional accross the application.
+//              - see the "Load Saved Data" function found under "File" in any Form. 
+//  Note: the "what if" buton is in application for UI purposes but does not yet serve any functionality.
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -44,11 +43,16 @@ namespace CSC370TeamProject
             InitializeComponent();
             if (myGlobals.isDataLoaded != true)
                 myGlobals.isDataLoaded = false;
+            if(myGlobals.isDataLoaded)
+            {
+                loadSavedStocksToolStripMenuItem.PerformClick();
+            }
 
         }
 
         public void AlphaVantageStocksDemo(Excel excel)
         {
+            int stockNum = 0;
             try
             {
                 string apiKey = "S5TJJRN8PSP31YVU"; // enter your API key here
@@ -58,6 +62,7 @@ namespace CSC370TeamProject
                         continue;
 
                     //accesses the value of the stock with appreviation 'symbol' 
+                    stockNum++;
                     var symbol = myStocks[i].getName().ToUpper();
                     var dailyPrices = $"https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={symbol}&apikey={apiKey}&datatype=csv"
                                         .GetStringFromUrl().FromCsv<List<AlphaVantageData>>();
@@ -74,7 +79,7 @@ namespace CSC370TeamProject
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error on stock input, ensure all stocks symbols are entered correctly", "Error on Input");
+                MessageBox.Show("Error on stock input for stock number " + stockNum + ", ensure all stocks symbols are entered correctly", "Error on Input");
             }
             if (myStocks[0].getName() == null && myStocks[1].getName() == null && myStocks[2].getName() == null && myStocks[3].getName() == null)
             {
@@ -233,6 +238,7 @@ namespace CSC370TeamProject
             int counter = 1;
             while (usrExcel.readCell(counter, 1) != null)
                 counter += 10;
+            
 
             usrExcel.writeToCell(counter, 1, DateTime.Now.ToString());
             for(int i = 1 + counter; i< 6 + counter; i++)
@@ -291,6 +297,9 @@ namespace CSC370TeamProject
             Excel histExcel = new Excel(System.AppDomain.CurrentDomain.BaseDirectory + "HistoricalProfileValues.xlsx", 1);
             myGlobals.historicVals = new ArrayList();
             myGlobals.historicTimestamps = new ArrayList();
+            myGlobals.historicVals.Clear();
+            myGlobals.historicTimestamps.Clear();
+            int track = 2;
             int counter = 1;
             while (usrExcel.readCell(counter, 1) != null)
             {
@@ -298,12 +307,10 @@ namespace CSC370TeamProject
                 if (usrExcel.readCell(counter + 7, 2) != null)
                 {
                     myGlobals.historicVals.Add(usrExcel.readCell(counter + 7, 2));
-                    myGlobals.historicTimestamps.Add(Convert.ToString(usrExcel.readCell(counter, 1)));
-                    int track = 1;
-                    while (histExcel.readCell(track, 1) != null)
-                        track++;
-                    histExcel.writeToCell(track, 1, usrExcel.readCell(counter, 1));
+                    myGlobals.historicTimestamps.Add(Convert.ToString((string)usrExcel.readCell(counter, 1)));
+                    histExcel.writeToCell(track, 1, Convert.ToString(myGlobals.historicTimestamps[track-2]));
                     histExcel.writeToCell(track, 2, usrExcel.readCell(counter + 7, 2));
+                    track++;
                 }
             }
             usrExcel.Close();
@@ -367,7 +374,7 @@ namespace CSC370TeamProject
             defineLabels(excel);
             excel.Save();
             excel.Close();
-
+            myGlobals.isDataLoaded = true;
         }
     }
 
