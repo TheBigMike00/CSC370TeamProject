@@ -229,21 +229,21 @@
             // saveAsToolStripMenuItem
             // 
             this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
-            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
+            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(248, 34);
             this.saveAsToolStripMenuItem.Text = "Save";
             this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.saveAsToolStripMenuItem_Click);
             // 
             // loadSavedStocksToolStripMenuItem
             // 
             this.loadSavedStocksToolStripMenuItem.Name = "loadSavedStocksToolStripMenuItem";
-            this.loadSavedStocksToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
+            this.loadSavedStocksToolStripMenuItem.Size = new System.Drawing.Size(248, 34);
             this.loadSavedStocksToolStripMenuItem.Text = "Load Saved Data";
             this.loadSavedStocksToolStripMenuItem.Click += new System.EventHandler(this.loadSavedStocksToolStripMenuItem_Click);
             // 
             // openToolStripMenuItem
             // 
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(248, 34);
             this.openToolStripMenuItem.Text = "Open Excel";
             this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
             // 
@@ -327,6 +327,7 @@
             this.whatIfButton.TabIndex = 29;
             this.whatIfButton.Text = "What If?";
             this.whatIfButton.UseVisualStyleBackColor = true;
+            this.whatIfButton.Click += new System.EventHandler(this.whatIfButton_Click);
             // 
             // StockProfile
             // 

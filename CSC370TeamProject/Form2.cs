@@ -99,7 +99,7 @@ namespace CSC370TeamProject
 
         public void defineLabels(Excel usrExcel)
         {
-            dateCreatedTB.Text = Convert.ToString(myGlobals.historicTimestamps[0]);
+            //dateCreatedTB.Text = Convert.ToString(myGlobals.historicTimestamps[0]);
             initialInvestmentTB.Text = "$" + Convert.ToString(myGlobals.historicVals[0]);
             double currentV = Convert.ToDouble(myGlobals.historicVals[myGlobals.historicVals.Count - 1]);
             double initialV = Convert.ToDouble(myGlobals.historicVals[0]);
@@ -172,6 +172,14 @@ namespace CSC370TeamProject
             excel.Save();
             usrExcel.Close();
             excel.Close();
+        }
+
+        private void whatIfButton_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            Form3 whatIf = new Form3();
+            whatIf.ShowDialog();
+            this.Close();
         }
     }
 }

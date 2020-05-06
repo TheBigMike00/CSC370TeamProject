@@ -196,8 +196,7 @@ namespace CSC370TeamProject
             catch(Exception ex)
             {
                 //notifies about user input errors, such as when decimals are entered in the quantity section
-                MessageBox.Show("Please double check inputs. Ensure stock" +
-                    " symbols are typed correctly and entered stocks have a valid quantitiy.", "Error On Input");
+                MessageBox.Show("All stock quantities must be integers. (No decimals)", "Error On Input");
             }
 
             for (int index = 0; index < 4; index++)
@@ -307,8 +306,8 @@ namespace CSC370TeamProject
                 if (usrExcel.readCell(counter + 7, 2) != null)
                 {
                     myGlobals.historicVals.Add(usrExcel.readCell(counter + 7, 2));
-                    myGlobals.historicTimestamps.Add(Convert.ToString((string)usrExcel.readCell(counter, 1)));
-                    histExcel.writeToCell(track, 1, Convert.ToString(myGlobals.historicTimestamps[track-2]));
+                    //myGlobals.historicTimestamps.Add(Convert.ToString((string)usrExcel.readCell(counter, 1)));
+                    histExcel.writeToCell(track, 1, Convert.ToString(usrExcel.readCell(counter, 1)));
                     histExcel.writeToCell(track, 2, usrExcel.readCell(counter + 7, 2));
                     track++;
                 }
@@ -375,6 +374,14 @@ namespace CSC370TeamProject
             excel.Save();
             excel.Close();
             myGlobals.isDataLoaded = true;
+        }
+
+        private void whatIfButton_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            Form3 whatIf = new Form3();
+            whatIf.ShowDialog();
+            this.Close();
         }
     }
 

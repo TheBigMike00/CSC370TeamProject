@@ -28,13 +28,14 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.myStocksButton = new System.Windows.Forms.Button();
             this.myProfileButton = new System.Windows.Forms.Button();
             this.whatIfButton = new System.Windows.Forms.Button();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.loadSavedDataToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.historicValChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.dateCreatedLabel = new System.Windows.Forms.Label();
@@ -46,7 +47,6 @@
             this.label2 = new System.Windows.Forms.Label();
             this.percentChangeLabel = new System.Windows.Forms.Label();
             this.openExcelOfDataButton = new System.Windows.Forms.Button();
-            this.loadSavedDataToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.historicValChart)).BeginInit();
             this.SuspendLayout();
@@ -79,6 +79,7 @@
             this.whatIfButton.TabIndex = 2;
             this.whatIfButton.Text = "What If?";
             this.whatIfButton.UseVisualStyleBackColor = true;
+            this.whatIfButton.Click += new System.EventHandler(this.whatIfButton_Click);
             // 
             // menuStrip1
             // 
@@ -101,6 +102,13 @@
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(54, 29);
             this.fileToolStripMenuItem.Text = "File";
             // 
+            // loadSavedDataToolStripMenuItem
+            // 
+            this.loadSavedDataToolStripMenuItem.Name = "loadSavedDataToolStripMenuItem";
+            this.loadSavedDataToolStripMenuItem.Size = new System.Drawing.Size(248, 34);
+            this.loadSavedDataToolStripMenuItem.Text = "Load Saved Data";
+            this.loadSavedDataToolStripMenuItem.Click += new System.EventHandler(this.loadSavedDataToolStripMenuItem_Click);
+            // 
             // helpToolStripMenuItem
             // 
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
@@ -109,14 +117,14 @@
             // 
             // historicValChart
             // 
-            chartArea3.Name = "ChartArea1";
-            this.historicValChart.ChartAreas.Add(chartArea3);
+            chartArea1.Name = "ChartArea1";
+            this.historicValChart.ChartAreas.Add(chartArea1);
             this.historicValChart.Location = new System.Drawing.Point(350, 112);
             this.historicValChart.Name = "historicValChart";
-            series3.ChartArea = "ChartArea1";
-            series3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series3.Name = "Series1";
-            this.historicValChart.Series.Add(series3);
+            series1.ChartArea = "ChartArea1";
+            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series1.Name = "Series1";
+            this.historicValChart.Series.Add(series1);
             this.historicValChart.Size = new System.Drawing.Size(420, 275);
             this.historicValChart.TabIndex = 4;
             this.historicValChart.Text = "chart1";
@@ -208,13 +216,6 @@
             this.openExcelOfDataButton.Text = "Open Excel of Data";
             this.openExcelOfDataButton.UseVisualStyleBackColor = true;
             this.openExcelOfDataButton.Click += new System.EventHandler(this.openExcelOfDataButton_Click);
-            // 
-            // loadSavedDataToolStripMenuItem
-            // 
-            this.loadSavedDataToolStripMenuItem.Name = "loadSavedDataToolStripMenuItem";
-            this.loadSavedDataToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
-            this.loadSavedDataToolStripMenuItem.Text = "Load Saved Data";
-            this.loadSavedDataToolStripMenuItem.Click += new System.EventHandler(this.loadSavedDataToolStripMenuItem_Click);
             // 
             // Form2
             // 
