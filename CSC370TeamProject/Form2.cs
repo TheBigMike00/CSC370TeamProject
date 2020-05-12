@@ -17,7 +17,9 @@ namespace CSC370TeamProject
         {
             InitializeComponent();
 
-            //temporary...need to fix dates to display correctly
+            //checks to see if data was loaded in Form1 
+            //yes->load data in this form automatically
+            //no->keep data blank until user wished to load it
             dateCreatedLabel.Visible = false;
             dateCreatedTB.Visible = false;
             if (myGlobals.isDataLoaded)
@@ -33,6 +35,7 @@ namespace CSC370TeamProject
 
         public void loadChart()
         {
+            //create a new general line chart which will be used to map the profile value over time.
             Excel histExcel = new Excel(System.AppDomain.CurrentDomain.BaseDirectory + "HistoricalProfileValues.xlsx", 1);
             var myChart = historicValChart.ChartAreas[0];
             myChart.AxisX.IntervalType = System.Windows.Forms.DataVisualization.Charting.DateTimeIntervalType.Number;
@@ -54,19 +57,12 @@ namespace CSC370TeamProject
                     max = Convert.ToDouble(myGlobals.historicVals[i]);
                 }
             }
-            /*
-            int inter = 10;
-            while((inter*10) < max)
-            {
-                inter *= 10;
-            }
-            myChart.AxisY.Interval = inter;
-            */
             historicValChart.Series[0].IsVisibleInLegend = false;
             historicValChart.Series.Add("Value");
             historicValChart.Series["Value"].ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
             double currentV = Convert.ToDouble(myGlobals.historicVals[myGlobals.historicVals.Count - 1]);
             double initialV = Convert.ToDouble(myGlobals.historicVals[0]);
+            //Additional feature-> color coded labels
             if (currentV >= initialV)
             {
                 historicValChart.Series["Value"].Color = Color.Green;
@@ -99,7 +95,7 @@ namespace CSC370TeamProject
 
         public void defineLabels(Excel usrExcel)
         {
-            //dateCreatedTB.Text = Convert.ToString(myGlobals.historicTimestamps[0]);
+            //update the outputs of the entire form
             initialInvestmentTB.Text = "$" + Convert.ToString(myGlobals.historicVals[0]);
             double currentV = Convert.ToDouble(myGlobals.historicVals[myGlobals.historicVals.Count - 1]);
             double initialV = Convert.ToDouble(myGlobals.historicVals[0]);
@@ -141,6 +137,7 @@ namespace CSC370TeamProject
 
         private void loadSavedDataToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            //if statements used to check if current data is already loaded
             Excel usrExcel = new Excel(System.AppDomain.CurrentDomain.BaseDirectory + "UserData.xlsx", 1);
             Excel excel = new Excel(System.AppDomain.CurrentDomain.BaseDirectory + "MyData.xlsx", 1);
             int counter = 1;

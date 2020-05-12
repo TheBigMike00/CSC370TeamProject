@@ -1,19 +1,28 @@
-﻿//CSC370 Team Project Sprint4; Justin J, Derek R, Mike B; 4/30/2020
+﻿//CSC370 Team Project Final Sprint; Justin J, Derek R, Mike B; 5/12/2020
 //Purpose: Create an application which allows the user to input up to 4 separate stocks
 //and track the profile's total value. Catch common user input errors and handle 
 //accordingly. Allow option to save/open stock history.
-//Known Bugs: 1) Issues from previous prints attended to. There is a known bug where the arraylist of dates 
-//              is not being formatted correctly which will have to be attended to in the next sprint.
+//Known Bugs: 1) The application will sometimes throw an error on input due to an API restriction where the user can only
+//                 make up to 5 retrieval calls at a time.
 //
-//Sprint 3 Specs Completed: 
-//      1.) allow an option to list the historic value of the portfolio over time
-//              - see the Open data in excel option located in Form2
-//      2.) allow an option to produce a chart of the historic value over time
-//              - see the chart found in Form2
-//      2.5.) corrected the "open" command from previous sprint which now should be 
-//              funtional accross the application.
-//              - see the "Load Saved Data" function found under "File" in any Form. 
-//  Note: the "what if" buton is in application for UI purposes but does not yet serve any functionality.
+//Sprint 5 Specs Completed: 
+//      1.) - implement the “what if” option that allows the client to track stocks not in the portfolio 
+//              - see the entirety of form3
+//      2.) consider security for the app
+//              - a general design of user authentification has been created if the client 
+//                  so desires to have it implimented. (Not currently implemented in code -> Form4 design
+//              - additionally, the internal excel sheets are marked as read-only to prevent as many 
+//                  external conflicts as possible
+//      3.) consider maintenance for the app
+//              - Code is commented through its entirety with meaningful comments
+//              - known bugs are listed in the comments above
+//      4.) consider an additional feature/function (the team will specify a realistic option)
+//              - a chart is created in the 'What If?' page which shows the selected stock's "Week at a Glance"
+//              - 'My Profile' & 'What If?' both include a Percent change of their respective fields
+//              - Certain labels found in form2 & form3 will change color based upon whether they have gained/lost money
+//              - Both of the above features are those which are not listed as official specifications.
+
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -79,7 +88,9 @@ namespace CSC370TeamProject
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error on stock input for stock number " + stockNum + ", ensure all stocks symbols are entered correctly", "Error on Input");
+                MessageBox.Show("Error on input for stock number " + stockNum + ", ensure all stocks symbols are entered correctly\n\nNote: " +
+                    "this error may also be caused by an internal timing restriction. Please wait approximately 60 seconds and attempt to " +
+                    "add stocks again. Sorry for the annoyance.", "Error");
             }
             if (myStocks[0].getName() == null && myStocks[1].getName() == null && myStocks[2].getName() == null && myStocks[3].getName() == null)
             {
@@ -273,6 +284,7 @@ namespace CSC370TeamProject
             excel.Save();
             excel.Close();
             myGlobals.isDataLoaded = true;
+            MessageBox.Show("Profile Saved Successfully", "Success");
 
         }
 
@@ -292,12 +304,15 @@ namespace CSC370TeamProject
 
         public void recordHistoricalVals()
         {
+            //Both the user excel and historcal data excel sheets are needed to transfer the data
             Excel usrExcel = new Excel(System.AppDomain.CurrentDomain.BaseDirectory + "UserData.xlsx", 1);
             Excel histExcel = new Excel(System.AppDomain.CurrentDomain.BaseDirectory + "HistoricalProfileValues.xlsx", 1);
             myGlobals.historicVals = new ArrayList();
             myGlobals.historicTimestamps = new ArrayList();
             myGlobals.historicVals.Clear();
             myGlobals.historicTimestamps.Clear();
+            //track used to navigate the horizontal variable of the excels
+            //counter used to navigate from save to save
             int track = 2;
             int counter = 1;
             while (usrExcel.readCell(counter, 1) != null)
@@ -306,8 +321,7 @@ namespace CSC370TeamProject
                 if (usrExcel.readCell(counter + 7, 2) != null)
                 {
                     myGlobals.historicVals.Add(usrExcel.readCell(counter + 7, 2));
-                    //myGlobals.historicTimestamps.Add(Convert.ToString((string)usrExcel.readCell(counter, 1)));
-                    histExcel.writeToCell(track, 1, Convert.ToString(usrExcel.readCell(counter, 1)));
+                    histExcel.writeToCell(track, 1, Convert.ToString(track-2));
                     histExcel.writeToCell(track, 2, usrExcel.readCell(counter + 7, 2));
                     track++;
                 }
@@ -331,8 +345,10 @@ namespace CSC370TeamProject
 
         private void loadSavedStocksToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            //goal is to grab the last save from user excel and dump data into internal working data 
             Excel usrExcel = new Excel(System.AppDomain.CurrentDomain.BaseDirectory + "UserData.xlsx", 1);
             Excel excel = new Excel(System.AppDomain.CurrentDomain.BaseDirectory + "MyData.xlsx", 1);
+            //navigates to most recent save
             int counter = 1;
             while (usrExcel.readCell(counter, 1) != null)
                 counter += 10;
@@ -355,6 +371,7 @@ namespace CSC370TeamProject
                     excel.writeToCell(i - (counter), k, usrExcel.readCell(i, k));
                 }
             }
+            //now that the data is fetched the output must be displayed
             stock1TB.Text = excel.readCell(2, 1);
             stock2TB.Text = excel.readCell(3, 1);
             stock3TB.Text = excel.readCell(4, 1);
@@ -382,6 +399,17 @@ namespace CSC370TeamProject
             Form3 whatIf = new Form3();
             whatIf.ShowDialog();
             this.Close();
+        }
+
+        private void helpToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Inputs:\nTo save stocks to your profile, enter valid stock symbols in the 'Stock' " +
+                "field and its corresponding quantity in the 'Quantity' field.\nThe 'File' Menu has three (3) options which are " +
+                "as follows:\n'Save': Saves the current portfolio's data\n'Load Saved Data': Loads the most recent save of the portfolio" +
+                "\n'Open Excel': Opens all previous saves as an Excel file.\nUse the 'My Profile' and 'What If?' buttons" +
+                " to navigate to other features of the application.\n\nOutputs:\nThe application will automatically " +
+                "fetch the stocks' prices and calcuate the portfolio total in real time.\n\nNote: The applicaiton" +
+                " is only capable of fetctching five (5) stock prices per minute- globally.", "Help");
         }
     }
 

@@ -17,6 +17,8 @@ namespace CSC370TeamProject
         public Form3()
         {
             InitializeComponent();
+            //these settings are set on load to make chart more visually appealing when no stock is 
+            //being researched upon creation of the form
             chart1.Series[0].IsVisibleInLegend = false;
             resultsLabelContext.Visible = false;
             valuePlusMinusLabel.Visible = false;
@@ -42,7 +44,6 @@ namespace CSC370TeamProject
             chart1.Series.Clear();
             chart1.Series.Add("Value");
             chart1.Series["Value"].ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            chartExists = true;
 
             double[] stockVal = new double[7];
             string apiKey = "S5TJJRN8PSP31YVU"; // enter your API key here
@@ -75,7 +76,9 @@ namespace CSC370TeamProject
             }
             catch (Exception e)
             {
-                MessageBox.Show("Stock Symbol Entered Incorrectly", "Warning");
+                MessageBox.Show("Stock Symbol Entered Incorrectly\n\nNote: this error may also be caused by " +
+                    "an internal timing restriction. Please wait approximately 60 seconds and attempt to " +
+                    "add stocks again. Sorry for the annoyance.", "Error");
             }
         
             for (int i = 0; i < stockVal.Length; i++)
@@ -142,7 +145,9 @@ namespace CSC370TeamProject
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Stock Symbol Entered Incorrectly", "Warning");
+                    MessageBox.Show("Stock Symbol Entered Incorrectly\n\nNote: this error may also be caused by " +
+                    "an internal timing restriction. Please wait approximately 60 seconds and attempt to " +
+                    "add stocks again. Sorry for the annoyance.", "Error");
                     return;
                 }
                 loadChart();
