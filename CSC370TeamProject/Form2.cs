@@ -178,5 +178,14 @@ namespace CSC370TeamProject
             whatIf.ShowDialog();
             this.Close();
         }
+
+        private void helpToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("This page is meant to show how your portfolio has progressed over time.\n\nInputs: " +
+                "\nLoad Saved Data: Will load the portfolio history if not already loaded\nOpen Excel of Data: " +
+                "Will open an Excel sheet which lists the historical profile value\n\nOutputs:\nProfile Statistics " +
+                "including initial investment, current value, and percent change can be found on the left side of the " +
+                "screen.\nThe chart appearing on the left side of the screen shows the portfolio value over time.", "Help");
+        }
     }
 }

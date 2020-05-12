@@ -153,7 +153,7 @@ namespace CSC370TeamProject
                 loadChart();
 
                 resultsLabelContext.Text = quantity + " Shares of " + stockSymbolTB.Text + " 3 Months Ago";
-                valuePlusMinusLabel.Text = "Impact on Portfolio: " + Convert.ToString(currVal - pastVal);
+                valuePlusMinusLabel.Text = "Impact on Portfolio: " + Convert.ToString((currVal - pastVal) * quantity);
                 percentChangeLabel.Text = "Percent Change: " + Convert.ToString(((currVal - pastVal) / pastVal) * 100);
 
                 if (currVal >= pastVal)
@@ -176,6 +176,16 @@ namespace CSC370TeamProject
             {
                 MessageBox.Show("Please ensure the quantity field is entered as an integer (no decimals).", "Error on Input");
             }
+        }
+
+        private void helpToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("The page is meant to aid in your research of stocks.\nInputs:\nEnter a valid stock symbol in the " +
+                "'Enter Stock Symbol' field and a valid (integer) quantity in the 'Quantity' field. Press the <enter> key " +
+                "or select the 'Search' button to perform the search.\n\nOutputs:\nThe statistics of the provided stock name will be listed " +
+                "on the left, showing first what purchasing the provided number of shares three (3) months (90 days) ago would have done to the porfolio, " +
+                "and then showing the percent change of the stock itself over a three (3) month (90 days) period.\nThe chart on the right side of" +
+                " the screen shows a 'Week at a Glance' of the stock - showing its closing value over the last seven (7) days.", "Help");
         }
     }
 }

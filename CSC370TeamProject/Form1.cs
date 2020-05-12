@@ -278,6 +278,13 @@ namespace CSC370TeamProject
             //saves data to the user's historical excel sheet 
             Excel usrExcel = new Excel(System.AppDomain.CurrentDomain.BaseDirectory + "UserData.xlsx", 1);
             Excel excel = new Excel(System.AppDomain.CurrentDomain.BaseDirectory + "MyData.xlsx", 1);
+            if(this.getProfileTotal(excel) == 0)
+            {
+                MessageBox.Show("Cannot save an empty portfolio. Please enter stocks to add to your portfolio.", "Unable to Save");
+                usrExcel.Close();
+                excel.Close();
+                return;
+            }
             transferDataToUser(usrExcel, excel);
             usrExcel.Save();
             usrExcel.Close();
